@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ne">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#6284a5" />
+    <meta name="msapplication-navbutton-color" content="#6284a5" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="msapplication-TileImage" content="editor_logo.png" />
+    <meta name="msapplication-TileColor" content="#1f242d" />
+    <meta name="description" content="Edit and create documents with ease using our comprehensive document editor. Build and customize your documents with advanced features." />
+    <meta name="author" content="Darpan Adhikari" />
+    <meta name="keywords" content="document editor, document creator, text editor, Word editor, offline document editor, document storage, email editor, document features" />
+    <meta property="og:title" content="Edit and Create Documents Easily" />
+    <meta property="og:image" content="editor_logo.png" />
+    <meta property="og:url" content="https://document.darpanadhikari.com.np" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Mero Document" />
+    <meta property="og:description" content="Experience powerful document editing and creation with Mero Document. Incorporate tables, images, charts, and more." />
+    
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@Darpan_3" />
+    <meta name="twitter:title" content="Edit and Create Documents Easily" />
+    <meta name="twitter:description" content="Experience powerful document editing and creation with Mero Document. Incorporate tables, images, charts, and more." />
+    <meta name="twitter:image" content="editor_logo.png" />    
+    <link
+      rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="./assets/css/rich_text.css" />
+    <link rel="shortcut icon" href="./assets/images/editor_logo.png" type="image/x-icon" />
+    <script src="./assets/js/template.js" defer></script>
+    <script src="./assets/js/rich_text.js" defer></script>
+    <script type="module" src="./assets/js/voice-typing.js" defer></script>
+    <script src="./assets/js/app.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.2/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.0/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+    <title>Mero Document</title>
+  </head>
+  <body>
+    <div id="loading" class="loading">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+    <div id="dialogOverlay" class="dialog-overlay">
+      <div id="dialogBox" class="dialog-box">
+        <div id="dialogContent">
+          <span id="alert-msg"></span>
+          <div id="dialogueMainContent">
+            <!-- for text: class="text-content" -->
+            <!-- for buttons div: class="btns" -->
+            <!-- for input div: class="input-field" -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul id="custom-menu" class="custom-menu"></ul>
+    <div class="editor-container" id="editor-container">
+      <div class="top-nav">
+        <ul class="nav">
+          <li>
+            <a href="https://darpanadhikari.com.np" target="_blank">
+              <img class="logo" src="./assets/images/editor_logo.png" alt="" />
+            </a>
+          </li>
+          <li tabindex="0" class="nav-item">
+            File
+            <ul>
+              <li>New <i>&#9658;</i>
+               <ul class="side-item">
+                <li id="newTab">New Document <i class="fas fa-file-invoice"></i></li>
+                <li id="inbuiltFormat">Templates <i class="far fa-file-image"></i></li>
+               </ul>
+              </li>
+              <li>
+                Open <i>&#9658;</i>
+                <ul class="side-item">
+                  <li id="openFile">Device <i class="fas fa-laptop"></i></li>
+                  <li id="localFile">Local <i class="fas fa-database"></i></li>
+                </ul>
+                <input type="file" accept=".txt,.docx,.mydoc" id="newFile" hidden />
+              </li>
+              <hr />
+              <li id="downloadBtn">
+                Download <i class="fas fa-file-export"></i>
+              </li>
+              <li id="localSave">Local Save <i class="fas fa-save"></i></li>
+              <li id="emailSend">Email <i class="fas fa-envelope"></i></li>
+              <li onclick="document.getElementById('printDoc').click();">
+                Print <i class="fas fa-print"></i>
+              </li>
+              <hr />
+              <li id="pageSetup">
+                Page Setup <i class="far fa-file-lines"></i>
+              </li>
+            </ul>
+          </li>
+          <li tabindex="1" class="nav-item">
+            Edit
+            <ul>
+              <li id="cutBtn">Cut <span>(ctrl+x)</span></li>
+              <li id="copyBtn">Copy <span>(ctrl+c)</span></li>
+              <li id="pasteBtn">Paste <span>(ctrl+v)</span></li>
+              <li id="pasteWtBtn">
+                Without Format <span>(Ctrl+shift+v)</span>
+              </li>
+              <hr />
+              <li id="selectAll">Select all <span>(ctrl+a)</span></li>
+              <li id="deleteFile">
+                Delete <i class="fa-regular fa-trash-can"></i>
+              </li>
+              <li id="findReplace">Find and Replace <span>(ctrl+f)</span></li>
+            </ul>
+          </li>
+          <li tabindex="2" class="nav-item">
+            Insert
+            <ul>
+              <li onclick="document.getElementById('attachImage').click();">
+                Image <i class="fas fa-image"></i>
+              </li>
+              <li id="insertTable">Table <i class="fas fa-table"></i></li>
+              <li id="insertChart">
+                Add Chart <i class="fas fa-bar-chart"></i>
+              </li>
+              <li id="insertDrawing">
+                Custom Draw <i class="fas fa-pen"></i>
+              </li>
+              <hr />
+              <li onclick="document.getElementById('horizontalBtn').click();">
+                Horizontal Line <span>&#9866;</span>
+              </li>
+              <li onclick="document.getElementById('insertLink').click();">
+                Link <i class="fas fa-link"></i>
+              </li>
+            </ul>
+          </li>
+          <li tabindex="3" class="nav-item">
+            Format
+            <ul>
+              <li>
+                Text <i>&#9658;</i>
+                <ul class="side-item">
+                  <li onclick="document.getElementById('boldBtn').click();">
+                    Bold <i class="fas fa-bold"></i>
+                  </li>
+                  <li onclick="document.getElementById('italicBtn').click();">
+                    Italic <i class="fas fa-italic"></i>
+                  </li>
+                  <li
+                    onclick="document.getElementById('underlineBtn').click();"
+                  >
+                    Underline <i class="fas fa-italic"></i>
+                  </li>
+                  <li id="Strikethrough">
+                    Strikethrough <i class="fas fa-strikethrough"></i>
+                  </li>
+                  <li id="SuperScript">
+                    SuperScript <i class="fas fa-superscript"></i>
+                  </li>
+                  <li id="SubScript">
+                    SubScript <i class="fas fa-subscript"></i>
+                  </li>
+                  <hr />
+                  <li>
+                    Text Transform <i class="fas fa-font"></i>
+                    <ul class="side-item right" id="capitalizeBtn">
+                      <li>UpperCase</li>
+                      <li>Capitalize</li>
+                      <li>LowerCase</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <hr />
+              <li>
+                Align & Indent <i>&#9658;</i>
+                <ul class="side-item">
+                  <li onclick="document.getElementById('leftBtn').click();">
+                    Left <i class="fas fa-align-left"></i>
+                  </li>
+                  <li onclick="document.getElementById('centerBtn').click();">
+                    Center <i class="fas fa-align-center"></i>
+                  </li>
+                  <li onclick="document.getElementById('rightBtn').click();">
+                    Right <i class="fas fa-align-right"></i>
+                  </li>
+                  <li onclick="document.getElementById('justifyBtn').click();">
+                    Justified <i class="fas fa-align-justify"></i>
+                  </li>
+                  <hr />
+                  <li onclick="document.getElementById('indentBtn').click();">
+                    Increase Indent <i class="fas fa-outdent"></i>
+                  </li>
+                  <li onclick="document.getElementById('outdentBtn').click();">
+                    Decrease Indent <i class="fas fa-indent"></i>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Line Height<i>&#9658;</i>
+                <ul class="side-item" id="lineHeight">
+                  <li>1.15</li>
+                  <li>1.5</li>
+                  <li>2</li>
+                  <li>3</li>
+                  <li>5</li>
+                </ul>
+              </li>
+              <li>
+                List <i>&#9658;</i>
+                <ul class="side-item">
+                  <li onclick="document.getElementById('ordList').click();">
+                    Order List <i class="fas fa-list-ol"></i>
+                  </li>
+                  <li onclick="document.getElementById('unordList').click();">
+                    Unorder List <i class="fas fa-list-ul"></i>
+                  </li>
+                </ul>
+              </li>
+              <hr />
+              <li onclick="document.getElementById('removeBtn').click();">
+                Clear Formatting <i class="fas fa-eraser"></i>
+              </li>
+            </ul>
+          </li>
+          <li tabindex="4" class="nav-item">
+            Tools
+            <ul>
+              <li id="countData">
+                Count Data<i class="fas fa-calculator"></i>
+              </li>
+              <li id="nepaliDict">
+                बर्णमाला <i class="fas fa-book"></i>
+              </li>
+              <li accesskey="s" title="alt+s" id="codeBtn">
+                View code <i class="far fa-file-code"></i>
+              </li>
+              <li onclick="document.getElementById('fullScrBtn').click();">
+                Full Screen <i class="fas fa-expand"></i>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="edit-btns">
+        <button class="tooltip no-border" id="searchText">
+          <i class="fas fa-search"></i>
+          <span class="tooltiptext">Search Text</span>
+        </button>
+        <button class="tooltip no-border indicator" id="voiceTyping">
+          <span>🎙️</span>
+          <span class="tooltiptext">Voice Typing</span>
+        </button>
+        <button class="tooltip no-border" id="check-np-spell">
+          <span>NP</span>
+          <span class="tooltiptext">Check spell</span>
+        </button>
+        <button class="tooltip" id="printDoc">
+          <i class="fas fa-print"></i>
+          <span class="tooltiptext">Print</span>
+        </button>
+        <select class="tooltip no-border" id="changeTextStyle">
+          <option value="" accesskey="0" title="alt+0">Normal</option>
+          <option value="h6" accesskey="6" title="alt+6">Heading 6</option>
+          <option value="h5" accesskey="5" title="alt+5">Heading 5</option>
+          <option value="h4" accesskey="4" title="alt+4">Heading 4</option>
+          <option value="h3" accesskey="3" title="alt+3">Heading 3</option>
+          <option value="h2" accesskey="2" title="alt+2">Heading 2</option>
+          <option value="h1" accesskey="1" title="alt+1">Heading 1</option>
+        </select>
+        <select class="tooltip no-border" id="changeFontFamily">
+          <option value="Arial, sans-serif" style="--family: Arial, sans-serif">
+            Arial
+          </option>
+          <option
+            value="'Amatic SC', cursive"
+            style="--family: 'Amatic SC', cursive"
+          >
+            Amatic SC
+          </option>
+          <option value="'Caveat', cursive" style="--family: 'Caveat', cursive">
+            Caveat
+          </option>
+          <option
+            value="'Comfortaa', cursive"
+            style="--family: 'Comfortaa', cursive"
+          >
+            Comfortaa
+          </option>
+          <option
+            value="'Comic Sans MS', cursive"
+            style="--family: 'Comic Sans MS', cursive"
+          >
+            Comic Sans MS
+          </option>
+          <option
+            value="'Courier', monospace"
+            style="--family: 'Courier', monospace"
+          >
+            Courier
+          </option>
+          <option
+            value="'EB Garamond', serif"
+            style="--family: 'EB Garamond', serif"
+          >
+            EB Garamond
+          </option>
+          <option value="'Georgia', serif" style="--family: 'Georgia', serif">
+            Georgia
+          </option>
+          <option value="'Impact', fantasy" style="--family: 'Impact', fantasy">
+            Impact
+          </option>
+          <option value="'Legend', cursive" style="--family: 'Legend', cursive">
+            Legend
+          </option>
+          <option
+            value="'Lobster', cursive"
+            style="--family: 'Lobster', cursive"
+          >
+            Lobster
+          </option>
+          <option
+            value="'Pacifico', cursive"
+            style="--family: 'Pacifico', cursive"
+          >
+            Pacifico
+          </option>
+          <option
+            value="'Playfair Display', serif"
+            style="--family: 'Playfair Display', serif"
+          >
+            Playfair Display
+          </option>
+          <option
+            value="'Times New Roman', serif"
+            style="--family: 'Times New Roman', serif"
+          >
+            Times New Roman
+          </option>
+          <option
+            value="'Roboto', sans-serif"
+            style="--family: 'Roboto', sans-serif"
+          >
+            Roboto
+          </option>
+        </select>
+
+        <div class="tooltip no-border">
+          <i
+            class="fas fa-minus"
+            accesskey="-"
+            title="alt -"
+            onclick="changeSize(-1)"
+          ></i>
+          <input type="number" value="14" readonly id="fontSize" />
+          <i
+            class="fas fa-plus"
+            accesskey="="
+            title="alt +"
+            onclick="changeSize(1)"
+          ></i>
+          <select id="fontSizeOptions" class="fontSizeOptions">
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="14" selected>14</option>
+            <option value="18">18</option>
+            <option value="24">24</option>
+            <option value="30">30</option>
+            <option value="36">36</option>
+            <option value="48">48</option>
+            <option value="60">60</option>
+            <option value="72">72</option>
+            <option value="96">96</option>
+          </select>
+        </div>
+
+        <button class="tooltip" id="boldBtn">
+          <i class="fas fa-bold"></i>
+          <span class="tooltiptext">Bold</span>
+        </button>
+        <button class="tooltip" id="italicBtn">
+          <i class="fas fa-italic"></i>
+          <span class="tooltiptext">Italic</span>
+        </button>
+        <button class="tooltip" id="underlineBtn">
+          <i class="fas fa-underline"></i>
+          <span class="tooltiptext">Underline</span>
+        </button>
+
+        <div class="pic-color">
+          <button
+            class="tooltip no-border"
+            onclick="toggleColorInput('textColorInput')"
+          >
+            <i class="fas fa-pen"></i>
+            <span class="tooltiptext">Text Color</span>
+          </button>
+          <input type="color" list="popularColors" id="textColorInput" class="color-input"/>
+        </div>
+        <div class="pic-color">
+          <button
+            class="tooltip no-border"
+            onclick="toggleColorInput('highlightColorInput')"
+          >
+            <i class="fas fa-highlighter"></i>
+            <span class="tooltiptext">Text Highlight</span>
+          </button>
+          <input
+            type="color"
+            id="highlightColorInput"
+            class="color-input" list="popularColors"
+          />
+        </div>
+
+        <button class="tooltip no-border" id="insertLink">
+          <i class="fas fa-link"></i>
+          <span class="tooltiptext">Link</span>
+        </button>
+        <button class="tooltip no-border" accesskey="i" id="attachImage">
+          <i class="fas fa-image"></i>
+          <span class="tooltiptext">Insert Image</span>
+        </button>
+        <button class="tooltip" id="leftBtn">
+          <i class="fas fa-align-left"></i>
+          <span class="tooltiptext">Align Left</span>
+        </button>
+        <button class="tooltip" id="centerBtn">
+          <i class="fas fa-align-center"></i>
+          <span class="tooltiptext">Align Center</span>
+        </button>
+        <button class="tooltip" id="rightBtn">
+          <i class="fas fa-align-right"></i>
+          <span class="tooltiptext">Align Right</span>
+        </button>
+        <button class="tooltip" id="justifyBtn">
+          <i class="fas fa-align-justify"></i>
+          <span class="tooltiptext">Justified</span>
+        </button>
+        <button class="tooltip" id="ordList">
+          <i class="fas fa-list-ol"></i>
+          <span class="tooltiptext">Ordered List</span>
+        </button>
+        <button class="tooltip" id="unordList">
+          <i class="fas fa-list-ul"></i>
+          <span class="tooltiptext">Unordered List</span>
+        </button>
+        <button class="tooltip" id="outdentBtn">
+          <i class="fas fa-outdent"></i>
+          <span class="tooltiptext">Decrease Indent</span>
+        </button>
+        <button class="tooltip" id="indentBtn">
+          <i class="fas fa-indent"></i>
+          <span class="tooltiptext">Increase Indent</span>
+        </button>
+        <button class="tooltip no-border" id="horizontalBtn">
+          <i>&#9866;</i>
+          <span class="tooltiptext">Horizontal Line</span>
+        </button>
+        <button class="tooltip no-border" id="removeBtn">
+          <i class="fas fa-eraser"></i>
+          <span class="tooltiptext">Clear Format</span>
+        </button>
+        <button class="tooltip no-border" id="fullScrBtn">
+          <i class="fas fa-expand"></i>
+          <span class="tooltiptext">Full Screen</span>
+        </button>
+      </div>
+      <datalist id="popularColors">
+        <option value="#FF0000">Red</option>
+        <option value="#00FF00">Green</option>
+        <option value="#0000FF">Blue</option>
+        <option value="#FFFF00">Yellow</option>
+        <option value="#FFA500">Orange</option>
+        <option value="#800080">Purple</option>
+        <option value="#FFFFFF">White</option>
+        <option value="#000000">Black</option>
+        <option value="#808080">Gray</option>
+        <option value="#FFC0CB">Pink</option>
+        <option value="#A52A2A">Brown</option>
+        <option value="#00FFFF">Cyan</option>
+        <option value="#FFD700">Gold</option>
+        <option value="#008080">Teal</option>
+        <option value="#FF4500">Orange Red</option>
+      </datalist>
+      <div class="edit-field">
+        <div class="text-field" style="font-family: 'Noto Sans Devanagari', sans-serif;" id="text-field" contenteditable>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="./assets/js/index.js"></script>
+  </body>
+</html>
