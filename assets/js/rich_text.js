@@ -1992,8 +1992,8 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
       }
       content += `
-        <li class="custom-menu-item" onclick="">Copy <span>(ctrl+c)</span></li>
-        <li class="custom-menu-item" onclick="">Paste <span>(ctrl+v)</span></li>
+        <li class="custom-menu-item" onclick="document.getElementById('copyBtn').click();">Copy <span>(ctrl+c)</span></li>
+        <li class="custom-menu-item" onclick="document.getElementById('pasteBtn').click();">Paste <span>(ctrl+v)</span></li>
         <li class="custom-menu-item" onclick="applyGradientText()">Gradient Color</li>
         ${
           checkTable(event) ||
